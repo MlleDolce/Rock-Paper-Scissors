@@ -4,119 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
-    <script>
-        function getPlayerChoice() {
-            let playerSelection = prompt( "Choose 'Rock', 'Paper', or 'Scissors'" );
-
-            //Make player selection all lower-case
-            playerSelection = playerSelection.toLowerCase();
-            console.log('playerSelection:', playerSelection);
-
-            //Confirm that the player selection is one of the three valid game choices
-            //If not, prompt the User for another entry.
-            if ((playerSelection !== "rock") && (playerSelection !== "paper") && (playerSelection !== "scissors")) {
-                alert (`${playerSelection} is an invalid game selection. Try again.`)
-                getPlayerChoice();
-            } else {
-                console.log(`${playerSelection} is a valid choice.`);
-            }
-            return playerSelection;
-        }
-
-        function getComputerChoice() {
-            let computerSelection = undefined;
-            let randomNumber = Math.random() * 100;
-            console.log('randomNumber:', randomNumber);
-            
-            if ((randomNumber >= 0) && (randomNumber <= 33.3)) {
-                computerSelection = 'rock';
-            } else if ((randomNumber > 33.3) && (randomNumber <= 66.6)) {
-                computerSelection = 'paper';
-            } else {
-                computerSelection = 'scissors';
-            }
-
-            console.log('computerSelection:', computerSelection);
-            return computerSelection;
-
-            }
-
-        function playRound(playerSelection, computerSelection) {
-
-            if ((playerSelection === "rock") && (computerSelection === "rock")) {
-                alert( "You Tie! You both chose rock." );
-                return "You Tie! You both chose rock.";
-            } else if ((playerSelection === "rock") && (computerSelection === "paper")) {
-                alert( "You Lose! Paper beats rock." );
-                return "You Lose! Paper beats rock.";
-            } else if ((playerSelection === "rock") && (computerSelection === "scissors")) {
-                alert( 'You Win! Rock beats scissors.' );
-                return "You Win! Rock beats scissors.";
-            } else if ((playerSelection === "paper") && (computerSelection === "rock")) {
-                alert( 'You Win! Paper beats rock.' );
-                return "You Win! Paper beats rock.";
-            } else if ((playerSelection === "paper") && (computerSelection === "paper")) {
-                alert( 'You Tie! You both chose paper.' );
-                return "You Tie! You both chose paper.";
-            } else if ((playerSelection === "paper") && (computerSelection === "scissors")) {
-                alert( 'You Lose! Scissors beats paper.' );
-                return "You Lose! Scissors beats paper.";
-            } else if ((playerSelection === "scissors") && (computerSelection === "rock")) {
-                alert( 'You Lose! Rock beats scissors.' );
-                return "You Lose! Rock beats scissors.";
-            } else if ((playerSelection === "scissors") && (computerSelection === "paper")) {
-                alert( 'You Win! Scissors beats paper.');
-                return "You Win! Scissors beats paper.";
-            } else if ((playerSelection === "scissors") && (computerSelection === "scissors")) {
-                alert( 'You Tie! You both chose scissors.');
-                return "You Tie! You both chose scissors.";
-            }
-        }
-
-        function playGame() {
-
-            let playerScore = 0;
-            let computerScore = 0;
-            let roundsTied = 0;
-            let result = "";
-
-            for (let i = 1; i <= 5; i++) {
-                let playerSelection = getPlayerChoice();
-                let computerSelection = getComputerChoice();
-                
-                result = playRound(playerSelection, computerSelection);
-                console.log('result[4]:', result[4])
-
-                switch(result[4]) {
-                    case 'L':
-                        computerScore++;
-                        break;
-                    case 'W':
-                        playerScore++;
-                        break;
-                    case 'T':
-                        roundsTied++;
-                        break;
-                }
-            }
-
-            if (playerScore > computerScore) {
-                alert( `Congratulations, you won the game! You scored ${playerScore} and the computer scored ${computerScore}. You tied in ${roundsTied} rounds.`)
-            } else {
-                alert( `You lost the game. You scored ${playerScore} and the computer scored ${computerScore}. You tied in ${roundsTied} rounds. Better luck next time!`)
-            }
-
-            let playerSelection = getPlayerChoice();
-            let computerSelection = getComputerChoice();
-
-            playRound(playerSelection, computerSelection);
-        }
-
-        playGame();
-
-    </script>
+    <script src="js-RPS.js" defer></script>
 </head>
 <body>
+    <h1>A Game of Rock, Paper, Scissors</h1>
+    <h4>Which do you choose?</h4>
+    <div class="button-container">
+        <button id="rock">Rock</button>
+        <button id="paper">Paper</button>
+        <button id="scissors">Scissors</button>
+    </div>
+    <!---- <button id="play-game">Play Game</button>  
+    -->
+    <div id="results-container">
+        <p></p>
+    </div>
+    <div id="score-container">
+        <h2>Rounds Score Tally:</h2>
+        <ul>
+            <li>Player: <span id="player-score">0</span></li>
+            <li>Computer: <span id="computer-score">0</span></li>
+        </ul>
+        <p id="game-results"></p>
+    </div>
     
 </body>
 </html>
