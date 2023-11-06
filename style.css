@@ -1,0 +1,100 @@
+html {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 30px;
+    padding: 0;
+}
+
+#button-container {
+    margin-top: 75px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+}
+
+h3 {
+    margin-bottom: 75px;
+}
+
+#score-container {
+    margin-top: 50px 0;
+}
+
+#rock-container, #paper-container, #button-container {
+    position: relative;
+}
+
+#new-game {
+    margin: 50px 0;
+}
+
+#game-results {
+    padding-top: 30px;
+}
+
+ul {
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    padding: 70px;
+    border: 2px solid red;
+    background-color: rgb(255, 192, 203);
+    margin: auto;
+    text-align: center;
+}
+
+#rock {
+    width: 200px;
+    height: 180px;
+    background-image: url('./images/Fist_rps_icon.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 0;
+    color: #ffffff00;
+}
+
+#paper {
+    width: 200px;
+    height: 180px;
+    background-image: url('./images/Paper_rps_icon.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 0;
+    color: #ffffff00;
+    
+}
+
+#scissors {
+    width: 200px;
+    height: 180px;
+    background-image: url('./images/Scissors_rps_icon.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 0;
+    color: #ffffff00;
+}
+
+#border-line {
+    width: 200px;
+    height: 25px;
+    margin: auto;
+    animation: flash 2s ease-in-out infinite paused;
+}
+
+@keyframes flash {
+    0% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: #00ff00;
+    }
+    100% {
+        background-color: transparent;
+    }
+}

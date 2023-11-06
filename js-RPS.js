@@ -1,12 +1,9 @@
 function getPlayerChoice() {
   let playerSelection = prompt("Choose 'Rock', 'Paper', or 'Scissors'");
 
-  //Make player selection all lower-case
   playerSelection = playerSelection.toLowerCase();
   console.log("playerSelection:", playerSelection);
 
-  //Confirm that the player selection is one of the three valid game choices
-  //If not, prompt the User for another entry.
   if (
     playerSelection !== "rock" &&
     playerSelection !== "paper" &&
@@ -19,10 +16,10 @@ function getPlayerChoice() {
   }
   return playerSelection;
 }
-
 function getComputerChoice() {
   let computerSelection = undefined;
   let randomNumber = Math.random() * 100;
+  ``;
   console.log("randomNumber:", randomNumber);
 
   if (randomNumber >= 0 && randomNumber <= 33.3) {
@@ -39,8 +36,7 @@ function getComputerChoice() {
 
 function playRound(playerSelection, computerSelection) {
   let content;
-  const resultsContainer = document.getElementById("results-container");
-  console.log("resultsContainer:", resultsContainer);
+  console.log("roundResults:", roundResults);
 
   if (playerSelection === "rock" && computerSelection === "rock") {
     content = "You Tie! You both chose rock.";
@@ -66,20 +62,41 @@ function playRound(playerSelection, computerSelection) {
   }
 
   console.log("content:", content);
-  resultsContainer.firstChild.textContent = content;
+  const newPara = document.createElement("p");
+  newPara.textContent = `Round ${whichRound}: ${content}`;
+  roundResults.insertBefore(newPara, roundResults.firstChild);
 
   return content;
+}
+
+function resetGame() {
+  whichRound = 1;
+  playerScore = 0;
+  computerScore = 0;
+  roundsTied = 0;
+  gameOver = false;
+
+  gameResults.textContent = "";
+  let roundResultsChildElements = roundResults.childNodes;
+  roundResults.removeChild(roundResults.lastChild);
+  // console.log("child nodes of round Results:", roundResultsChildElements);
+
+  while (roundResults.firstChild) {
+    roundResults.firstChild.remove();
+  }
+  computerScoreContainer.textContent = computerScore;
+  playerScoreContainer.textContent = computerScore;
+  hideNewGameButton();
 }
 
 function handleButtonClick(event) {
   const selectedButton = event.target;
 
   let playerSelection = selectedButton.textContent.toLowerCase();
-  console.log("playerSelection:", playerSelection);
   let computerSelection = getComputerChoice();
 
   let result = playRound(playerSelection, computerSelection);
-  console.log("result[4]:", result[4]);
+  console.log("playerSelection:", playerSelection);
 
   switch (result[4]) {
     case "L":
@@ -89,7 +106,10 @@ function handleButtonClick(event) {
       break;
     case "W":
       playerScore++;
-      console.log("playerScoreContainer", playerScoreContainer.firstChild.textContent);
+      console.log(
+        "playerScoreContainer",
+        playerScoreContainer.firstChild.textContent
+      );
       playerScoreContainer.textContent = playerScore;
       break;
     case "T":
@@ -97,52 +117,93 @@ function handleButtonClick(event) {
       break;
   }
 
-  roundsPlayed++;
+  if (whichRound === 1) {
+    btnNewGame.style.color = "#fff";
+    btnNewGame.style.backgroundColor = "#999";
+    btnNewGame.style.padding = "30px";
+    btnNewGame.textContent = "Restart Game";
+  }
 
-  if ((roundsPlayed >= 5) && (playerScore > computerScore)) {
+  whichRound++;
+
+  if (playerScore === 5 && playerScore > computerScore) {
     gameResultsText = `Congratulations, you won the game! You scored ${playerScore} and 
         the computer scored ${computerScore}. You tied in ${roundsTied} rounds.`;
     console.log("gameResultsText:", gameResultsText);
-    // console.log("gameResults", gameResults.textContent);
     gameResults.textContent = gameResultsText;
     gameOver = true;
-  } else if ((roundsPlayed >= 5) && (computerScore > playerScore)) {
+  } else if (computerScore === 5 && computerScore > playerScore) {
     gameResultsText = `You lost the game. You scored ${playerScore} and the computer scored ${computerScore}. 
         You tied in ${roundsTied} rounds. Better luck next time!`;
     console.log("gameResultsText:", gameResultsText);
-    // console.log("gameResults:", gameResults);
     gameResults.textContent = gameResultsText;
     gameOver = true;
   }
 
   if (gameOver === true) {
-    setTimeout(() => {
-        let newGame = prompt("Would you like to play another game? Answer y or n.");
-        console.log("newGame response:", newGame);
-
-        if (newGame === "y") {
-            roundsPlayed = 0;
-            playerScore = 0;
-            computerScore = 0;
-            roundsTied = 0;
-            gameOver = false;
-    
-            gameResults.textContent = "";
-            computerScoreContainer.textContent = computerScore;
-            playerScoreContainer.textContent = computerScore;
-        } else if (newGame === "n") {
-            gameResults.textContent = "Thanks for playing! Catch you next time.";
-    
-        };
-
-    }, 1500);
-
+    highlightNewGameButtonStyle();
   }
+}
 
+function handleNewGameClick() {
+  if (btnNewGame.textContent === "Play Again") {
+    resetNewGameButtonStyle();
+  }
+  resetRPSButtonStyles();
+  resetGame();
+}
+
+function highlightSelection(buttonChoice) {
+  let borderLine = buttonChoice.nextElementSibling;
+
+  borderLine.style.height = "25px";
+  borderLine.style.animationPlayState = "running";
+
+  rpsButtons.forEach((selection) => {
+    if (selection !== buttonChoice) {
+      borderLine = selection.nextElementSibling;
+
+      borderLine.style.animationPlayState = "paused";
+      borderLine.style.height = "0";
+    }
+  });
+}
+
+function highlightNewGameButtonStyle() {
+  btnNewGame.textContent = "Play Again";
+  btnNewGame.style.padding = "25px";
+  btnNewGame.style.borderRadius = "5px";
+  btnNewGame.style.color = "#fff";
+  btnNewGame.style.fontSize = "20px";
+  btnNewGame.style.fontStyle = "bold";
+  btnNewGame.style.backgroundColor = "#ed2bc6";
+}
+
+function resetNewGameButtonStyle() {
+  btnNewGame.textContent = "Restart Game";
+  btnNewGame.style.padding = "15px";
+  btnNewGame.style.borderRadius = "5px";
+  btnNewGame.style.color = "#000";
+  btnNewGame.style.backgroundColor = "#ddd";
+}
+
+function resetRPSButtonStyles() {
+  rpsButtons.forEach((selection) => {
+    const borderLine = selection.nextElementSibling;
+    borderLine.style.height = "0";
+  });
+}
+
+function hideNewGameButton() {
+  btnNewGame.textContent = "";
+  btnNewGame.style.backgroundColor = "#fff";
+  btnNewGame.style.color = "#fff";
+  btnNewGame.style.padding = "0";
+  btnNewGame.style.border = "0";
 }
 
 let gameOver = false;
-let roundsPlayed = 0;
+let whichRound = 1;
 let playerScore = 0;
 let computerScore = 0;
 let roundsTied = 0;
@@ -152,11 +213,31 @@ const btnRock = document.getElementById("rock");
 const btnPaper = document.getElementById("paper");
 const btnScissors = document.getElementById("scissors");
 
+const rpsButtons = [btnRock, btnPaper, btnScissors];
+
+const btnNewGame = document.getElementById("new-game");
+
+btnNewGame.style.backgroundColor = "#fff";
+btnNewGame.style.color = "#fff";
+btnNewGame.style.padding = "0";
+btnNewGame.style.border = "0";
+
+const roundResults = document.getElementById("results-container");
 const gameResults = document.getElementById("game-results");
 const playerScoreContainer = document.getElementById("player-score");
 const computerScoreContainer = document.getElementById("computer-score");
 
-btnRock.addEventListener("click", handleButtonClick);
-btnPaper.addEventListener("click", handleButtonClick);
-btnScissors.addEventListener("click", handleButtonClick);
+btnRock.addEventListener("click", (event) => {
+  highlightSelection(btnRock);
+  handleButtonClick(event);
+});
+btnPaper.addEventListener("click", (event) => {
+  highlightSelection(btnPaper);
+  handleButtonClick(event);
+});
+btnScissors.addEventListener("click", (event) => {
+  highlightSelection(btnScissors);
+  handleButtonClick(event);
+});
 
+btnNewGame.addEventListener("click", handleNewGameClick);
